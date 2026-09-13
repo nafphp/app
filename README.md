@@ -28,11 +28,11 @@ Everything about this package — what it does, how it is configured and what it
 in the [NAF documentation](https://nafphp.github.io/docs/). Not sure which packages you need?
 [Start here](https://nafphp.github.io/docs/choosing-packages/).
 
-## Install
+## Working on the starter
 
-```bash
-composer require naf/app
-```
+Read [AGENTS.md](AGENTS.md) for the starter layout, current dependency compatibility steps,
+extension examples and HTTP verification. Create a new project with the command above;
+`naf/app` is an application skeleton, not a library to require inside another application.
 
 ## License
 
