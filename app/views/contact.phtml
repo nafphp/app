@@ -1,5 +1,6 @@
 <?php
 use function Naf\Form\csrf;
+use function Naf\Form\error;
 use function Naf\Form\memory;
 use function Naf\route;
 ?>
@@ -17,12 +18,15 @@ use function Naf\route;
         <div class="grid">
             <label for="firstname">Vorname:</label>
             <input id="firstname" type="text" name="firstname" value="<?= memory('firstname') ?>" />
+            <?= error('firstname', $check) ?>
 
             <label for="lastname">Nachname:</label>
             <input id="lastname" type="text" name="lastname" value="<?= memory('lastname') ?>" />
+            <?= error('lastname', $check) ?>
 
             <label for="message">Nachricht:</label>
             <textarea id="message" name="message" rows="5" cols="50"><?= memory('message') ?></textarea>
+            <?= error('message', $check) ?>
         </div>
 
         <input type="hidden" name="_csrf" value="<?= csrf()->generate() ?>" />

@@ -3,12 +3,15 @@
 namespace App\Controllers;
 
 use App\Service\QuoteService;
-use Naf\Form\Core\Validator;
-use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use function Naf\Form\is_post;
+use function Naf\Form\validator;
 use function Naf\app;
 use function Naf\View\render;
-use function Naf\request;
+use function Naf\json;
+use function Naf\param;
+use function Naf\redirect;
+use function Naf\route;
 
 class WebsiteController
 {
@@ -20,25 +23,39 @@ class WebsiteController
         return render('welcome', ['quote' => $quote->getRandomQuote()]);
     }
 
-    public function contact(): ResponseInterface
+    public function api(): ResponseInterface
     {
-        /** @var RequestInterface $request */
-        $request = app()->container()->get('request');
+        $check = validator()->validate(param()->all(), [
+            'name' => 'required|max:80',
+        ]);
 
-        if (request()->getMethod() === 'POST') {
-
-            $validator = new Validator($request->getParsedBody(), [
-                'email' => 'required|email',
-                'password' => 'required|min:8',
-            ]);
-
-            if ($validator->fails()) {
-                return render('contact', ['validator' => $validator]);
-            }
-
+        if (!$check->isValid()) {
+            return json(['error' => 'Invalid request.', 'fields' => $check->getErrorMessages()], 422);
         }
 
-        return render('contact');
+        return json(['data' => ['hello' => param()->get('name')]]);
+    }
+
+    public function contact(): ResponseInterface
+    {
+        if (!is_post()) {
+            return render('contact', ['check' => validator()]);
+        }
+
+        $check = validator()->validate(param()->all(), [
+            'firstname' => 'required|max:80',
+            'lastname'  => 'required|max:80',
+            'message'   => 'required|min:10',
+        ]);
+
+        if (!$check->isValid()) {
+            // Back to the form; memory() still finds what was typed.
+            return render('contact', ['check' => $check]);
+        }
+
+        // Do something with it here - send a mail, store it, queue it.
+
+        return redirect(route('contact'));
     }
 
 }
