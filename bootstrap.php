@@ -3,7 +3,7 @@
 require_once 'vendor/autoload.php';
 
 use App\Service\QuoteService;
-use function NixPHP\app;
+use function Naf\app;
 
 const BASE_PATH = __DIR__;
 

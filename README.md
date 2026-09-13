@@ -1,6 +1,6 @@
-# NixPHP App
+# NAF App
 
-A clean starting point for building applications with [NixPHP](https://github.com/nixphp/framework) — the minimal and flexible PHP microframework.
+A clean starting point for building applications with [NAF](https://github.com/nafphp/framework) — the minimal and flexible PHP microframework.
 
 > **"As simple as possible, as flexible as necessary."**
 
@@ -9,13 +9,13 @@ A clean starting point for building applications with [NixPHP](https://github.co
 ## 🚀 Installation
 
 ```bash
-composer create-project nixphp/app my-app
+composer create-project naf/app my-app
 ```
 
 Alternatively, clone the repo manually:
 
 ```bash
-git clone https://github.com/nixphp/app my-app
+git clone https://github.com/nafphp/app my-app
 cd my-app
 composer install
 ```
@@ -68,7 +68,7 @@ route()->add('GET', '/', [App\Controllers\HomeController::class, 'index']);
 ```php
 namespace App\Controllers;
 
-use function NixPHP\render;
+use function Naf\render;
 
 class HomeController
 {
@@ -82,19 +82,19 @@ class HomeController
 3. Create a view in `app/views/home.phtml`:
 
 ```php
-<?php use function NixPHP\s; ?>
+<?php use function Naf\s; ?>
 
 <h1>Hello, <?= s($name) ?>!</h1>
 ```
 
 ---
 
-## 📦 About NixPHP
+## 📦 About NAF
 
-This app skeleton is based on the [NixPHP microframework](https://github.com/nixphp/framework).  
+This app skeleton is based on the [NAF microframework](https://github.com/nafphp/framework).  
 It’s designed to give you a clean starting point — nothing more, nothing less.
 
-To learn more about NixPHP and its philosophy, check out the [main documentation](https://nixphp.github.io/docs/).
+To learn more about NAF and its philosophy, check out the [main documentation](https://nafphp.github.io/docs/).
 
 ---
 
@@ -106,4 +106,4 @@ See [LICENSE](LICENSE) for details.
 ---
 
 Ready to build something awesome?  
-Start hacking with **NixPHP**. 🚀
+Start hacking with **NAF**. 🚀

@@ -3,12 +3,12 @@
 namespace App\Controllers;
 
 use App\Service\QuoteService;
-use NixPHP\Form\Core\Validator;
+use Naf\Form\Core\Validator;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use function NixPHP\app;
-use function NixPHP\View\render;
-use function NixPHP\request;
+use function Naf\app;
+use function Naf\View\render;
+use function Naf\request;
 
 class WebsiteController
 {

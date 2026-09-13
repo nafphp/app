@@ -2,9 +2,9 @@
 
 namespace App\Jobs;
 
-use NixPHP\Cli\Core\Output;
-use NixPHP\Queue\Core\QueueJobInterface;
-use function NixPHP\log;
+use Naf\Cli\Core\Output;
+use Naf\Queue\Core\QueueJobInterface;
+use function Naf\log;
 
 class SendMailJob implements QueueJobInterface
 {
