@@ -4,36 +4,36 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "abd672e0dfae9a2a99d5355e48cfb2b5",
+    "content-hash": "dee6fd16374611610fbf73424d73d70b",
     "packages": [
         {
-            "name": "nixphp/form",
-            "version": "v0.1.1",
+            "name": "naf/form",
+            "version": "v0.2.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/nixphp/form.git",
-                "reference": "173626c566f29933cec4554d87bcc4e9b02e4b7a"
+                "url": "https://github.com/nafphp/form.git",
+                "reference": "5c03230dd984421160554eea9023e7aa2b16c4c3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nixphp/form/zipball/173626c566f29933cec4554d87bcc4e9b02e4b7a",
-                "reference": "173626c566f29933cec4554d87bcc4e9b02e4b7a",
+                "url": "https://api.github.com/repos/nafphp/form/zipball/5c03230dd984421160554eea9023e7aa2b16c4c3",
+                "reference": "5c03230dd984421160554eea9023e7aa2b16c4c3",
                 "shasum": ""
             },
             "require": {
                 "ext-mbstring": "*",
-                "nixphp/framework": "^0.1.0",
-                "nixphp/session": "^0.1.0",
+                "naf/framework": "^0.2",
+                "naf/session": "^0.2",
                 "php": ">=8.3"
             },
             "require-dev": {
                 "phpunit/php-code-coverage": "^12.1",
                 "phpunit/phpunit": "^12.1"
             },
-            "type": "nixphp-plugin",
+            "type": "naf-plugin",
             "autoload": {
                 "psr-4": {
-                    "NixPHP\\Form\\": "src/"
+                    "Naf\\Form\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -46,25 +46,25 @@
                     "email": "office@florianknapp.de"
                 }
             ],
-            "description": "NixPHP Form Plugin to make form handling easier.",
+            "description": "NAF Form Plugin to make form handling easier.",
             "support": {
-                "issues": "https://github.com/nixphp/form/issues",
-                "source": "https://github.com/nixphp/form/tree/v0.1.1"
+                "issues": "https://github.com/nafphp/form/issues",
+                "source": "https://github.com/nafphp/form/tree/v0.2.0"
             },
-            "time": "2026-01-11T10:22:59+00:00"
+            "time": "2026-09-13T14:34:47+00:00"
         },
         {
-            "name": "nixphp/framework",
-            "version": "v0.1.4",
+            "name": "naf/framework",
+            "version": "v0.2.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/nixphp/framework.git",
-                "reference": "77c4af8edc56af900a687ac23ee2b8cc429545f5"
+                "url": "https://github.com/nafphp/framework.git",
+                "reference": "415db594f2ddf7aea5e5f571cb1bbc859568029c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nixphp/framework/zipball/77c4af8edc56af900a687ac23ee2b8cc429545f5",
-                "reference": "77c4af8edc56af900a687ac23ee2b8cc429545f5",
+                "url": "https://api.github.com/repos/nafphp/framework/zipball/415db594f2ddf7aea5e5f571cb1bbc859568029c",
+                "reference": "415db594f2ddf7aea5e5f571cb1bbc859568029c",
                 "shasum": ""
             },
             "require": {
@@ -89,7 +89,7 @@
                     "src/view_helpers.php"
                 ],
                 "psr-4": {
-                    "NixPHP\\": "src/"
+                    "Naf\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -102,29 +102,29 @@
                     "email": "office@florianknapp.de"
                 }
             ],
-            "description": "NixPHP - the ultra-light, functional PHP framework for fast microservices and APIs.",
+            "description": "NAF - the ultra-light, functional PHP framework for fast microservices and APIs.",
             "support": {
-                "issues": "https://github.com/nixphp/framework/issues",
-                "source": "https://github.com/nixphp/framework/tree/v0.1.4"
+                "issues": "https://github.com/nafphp/framework/issues",
+                "source": "https://github.com/nafphp/framework/tree/v0.2.1"
             },
-            "time": "2026-02-22T22:35:19+00:00"
+            "time": "2026-09-13T13:44:52+00:00"
         },
         {
-            "name": "nixphp/session",
-            "version": "v0.1.1",
+            "name": "naf/session",
+            "version": "v0.2.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/nixphp/session.git",
-                "reference": "51884697b25d0720e51b9f64ef44a60026d54ed9"
+                "url": "https://github.com/nafphp/session.git",
+                "reference": "a02bfdf08282b3bccaaf79bd9aa4a4790f12fea5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nixphp/session/zipball/51884697b25d0720e51b9f64ef44a60026d54ed9",
-                "reference": "51884697b25d0720e51b9f64ef44a60026d54ed9",
+                "url": "https://api.github.com/repos/nafphp/session/zipball/a02bfdf08282b3bccaaf79bd9aa4a4790f12fea5",
+                "reference": "a02bfdf08282b3bccaaf79bd9aa4a4790f12fea5",
                 "shasum": ""
             },
             "require": {
-                "nixphp/framework": "^0.1.0",
+                "naf/framework": "^0.2",
                 "php": ">=8.3"
             },
             "require-dev": {
@@ -132,16 +132,15 @@
                 "phpunit/phpunit": "^12.1"
             },
             "suggest": {
-                "nixphp/database": "Install to use the database-backed session storage handler."
+                "naf/database": "Install to use the database-backed session storage handler."
             },
-            "type": "nixphp-plugin",
+            "type": "naf-plugin",
             "extra": {
                 "mysql-version": ">=8.0.19"
             },
             "autoload": {
                 "psr-4": {
-                    "NixPHP\\Session\\": "src/",
-                    "NixPHP\\Database\\": "src/Database/"
+                    "Naf\\Session\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -154,39 +153,39 @@
                     "email": "office@florianknapp.de"
                 }
             ],
-            "description": "NixPHP Session Plugin for storing data across requests.",
+            "description": "NAF Session Plugin for storing data across requests.",
             "support": {
-                "issues": "https://github.com/nixphp/session/issues",
-                "source": "https://github.com/nixphp/session/tree/v0.1.1"
+                "issues": "https://github.com/nafphp/session/issues",
+                "source": "https://github.com/nafphp/session/tree/v0.2.0"
             },
-            "time": "2026-02-22T12:45:11+00:00"
+            "time": "2026-09-13T13:56:42+00:00"
         },
         {
-            "name": "nixphp/view",
-            "version": "v0.1.1",
+            "name": "naf/view",
+            "version": "v0.2.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/nixphp/view.git",
-                "reference": "0071769f5db47ef258de8197fe0757ca9078e2df"
+                "url": "https://github.com/nafphp/view.git",
+                "reference": "ebb337780287539a3e51a897161f8fc11d222c2e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nixphp/view/zipball/0071769f5db47ef258de8197fe0757ca9078e2df",
-                "reference": "0071769f5db47ef258de8197fe0757ca9078e2df",
+                "url": "https://api.github.com/repos/nafphp/view/zipball/ebb337780287539a3e51a897161f8fc11d222c2e",
+                "reference": "ebb337780287539a3e51a897161f8fc11d222c2e",
                 "shasum": ""
             },
             "require": {
-                "nixphp/framework": "^0.1.0",
+                "naf/framework": "^0.2",
                 "php": ">=8.3"
             },
             "require-dev": {
                 "phpunit/php-code-coverage": "^12.1",
                 "phpunit/phpunit": "^12.1"
             },
-            "type": "nixphp-plugin",
+            "type": "naf-plugin",
             "autoload": {
                 "psr-4": {
-                    "NixPHP\\View\\": "src/"
+                    "Naf\\View\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -199,12 +198,12 @@
                     "email": "office@florianknapp.de"
                 }
             ],
-            "description": "NixPHP View Plugin with simple templating.",
+            "description": "NAF View Plugin with simple templating.",
             "support": {
-                "issues": "https://github.com/nixphp/view/issues",
-                "source": "https://github.com/nixphp/view/tree/v0.1.1"
+                "issues": "https://github.com/nafphp/view/issues",
+                "source": "https://github.com/nafphp/view/tree/v0.2.0"
             },
-            "time": "2026-02-22T08:23:04+00:00"
+            "time": "2026-09-13T14:07:45+00:00"
         },
         {
             "name": "nyholm/psr7",
