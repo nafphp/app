@@ -27,16 +27,20 @@ Use an unused test directory outside the source checkout. For a new application:
 ```sh
 composer create-project naf/app nafphp-agent-demo
 cd nafphp-agent-demo
-composer require 'naf/framework:^0.2.2' 'naf/form:^0.2.1' --with-all-dependencies
 APP_ENV=dev php -S 127.0.0.1:8080 -t public
 ```
 
-The explicit update accounts for the starter's current lock file, which pins framework
-0.2.1 and form 0.2.0: framework 0.2.2 fixes redirect status lines for PHP's development server,
-and form 0.2.1 fixes request helpers and CSRF handling. Inspect the lock and published releases
-before removing this compatibility step. To test changes to the starter itself, copy the changed tree into
-a disposable host, run `composer install`, and test both the locked and updated dependencies;
-`create-project` alone only tests the published starter.
+Starter 0.2.2 includes an updated lock file and requires at least framework 0.2.2 and form
+0.2.1, which fix development-server redirects and request/CSRF helpers. New installations
+work without a separate dependency update. In applications created from older starters, run
+`composer require 'naf/framework:^0.2.2' 'naf/form:^0.2.1' --with-all-dependencies` to adopt
+these minimums. To test changes to the starter itself, copy the changed tree into a disposable
+host and run `composer install` followed by `composer test`; `create-project` alone only tests
+the published starter. Release dependencies before updating the starter's lock file, and
+verify the locked, latest compatible and minimum supported dependency sets before release.
+The starter also excludes `nyholm/psr7` below 1.8.2: its implicit-nullability deprecations
+on PHP 8.4+ become HTTP errors through NAF's error handler. Keep this transitive compatibility
+constraint until the required framework versions enforce an equivalent minimum themselves.
 
 Run the development server from the application root and serve only `public/`. The current
 bootstrap still loads `vendor/autoload.php` through a relative path; do not assume arbitrary
@@ -130,12 +134,14 @@ requiring `naf/queue`/`naf/cli`, which the starter does not install; it only log
 Neither is a ready mail integration. For delivery, install `naf/mail` and use its mailer;
 for tests, explicitly bind the [documented dummy or file transport](https://nafphp.github.io/docs/mail/).
 
-There is currently no Composer test/analyse script, PHPUnit suite or GitHub Actions workflow
-in the starter. Run `composer validate --strict`, lint changed PHP, then exercise the actual
-HTTP host: welcome page/assets, GET contact, invalid/valid contact submissions with the session
-cookie and fresh CSRF token, and invalid/valid POST `/api`. A bare POST without CSRF exercises
-the guard, not the controller. Check JSON bodies, status codes and redirect `Location` headers;
-do not follow redirects before asserting them. Test added routes such as `/greet/Ada` too.
+Run `composer validate --strict` and `composer test` (Python 3.9+ is needed only for the test
+runner). The HTTP smoke test starts and stops its own PHP server on a free loopback port;
+set `PHP_COMMAND='php -n'` only when needed for a broken local INI configuration and all
+required extensions are built in. CI runs the test on PHP 8.3 and 8.5 with locked, latest and
+lowest dependencies. It checks welcome/assets, contact rendering, CSRF rejection, validation,
+redirect status/Location and API JSON. There is no PHPUnit suite or analyse script. Lint
+changed PHP and test added routes such as `/greet/Ada` too. Keep tests of redirects from
+following them automatically, and use session cookies and fresh CSRF tokens for submissions.
 
 When changing setup or examples, also check the public
 [installation guide](https://nafphp.github.io/docs/install/),
