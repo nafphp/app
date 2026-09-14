@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "dee6fd16374611610fbf73424d73d70b",
+    "content-hash": "f40d92fb2390708010bff7eb7497b50a",
     "packages": [
         {
             "name": "naf/form",
-            "version": "v0.2.0",
+            "version": "v0.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nafphp/form.git",
-                "reference": "5c03230dd984421160554eea9023e7aa2b16c4c3"
+                "reference": "598bee7b0f46474fc644acfe293451ca518a2538"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nafphp/form/zipball/5c03230dd984421160554eea9023e7aa2b16c4c3",
-                "reference": "5c03230dd984421160554eea9023e7aa2b16c4c3",
+                "url": "https://api.github.com/repos/nafphp/form/zipball/598bee7b0f46474fc644acfe293451ca518a2538",
+                "reference": "598bee7b0f46474fc644acfe293451ca518a2538",
                 "shasum": ""
             },
             "require": {
@@ -49,22 +49,22 @@
             "description": "NAF Form Plugin to make form handling easier.",
             "support": {
                 "issues": "https://github.com/nafphp/form/issues",
-                "source": "https://github.com/nafphp/form/tree/v0.2.0"
+                "source": "https://github.com/nafphp/form/tree/v0.2.2"
             },
-            "time": "2026-09-13T14:34:47+00:00"
+            "time": "2026-09-13T19:56:50+00:00"
         },
         {
             "name": "naf/framework",
-            "version": "v0.2.1",
+            "version": "v0.2.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nafphp/framework.git",
-                "reference": "415db594f2ddf7aea5e5f571cb1bbc859568029c"
+                "reference": "acabfb56a205b9134c1dc61274e2aa9b5fbf574a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nafphp/framework/zipball/415db594f2ddf7aea5e5f571cb1bbc859568029c",
-                "reference": "415db594f2ddf7aea5e5f571cb1bbc859568029c",
+                "url": "https://api.github.com/repos/nafphp/framework/zipball/acabfb56a205b9134c1dc61274e2aa9b5fbf574a",
+                "reference": "acabfb56a205b9134c1dc61274e2aa9b5fbf574a",
                 "shasum": ""
             },
             "require": {
@@ -105,22 +105,22 @@
             "description": "NAF - the ultra-light, functional PHP framework for fast microservices and APIs.",
             "support": {
                 "issues": "https://github.com/nafphp/framework/issues",
-                "source": "https://github.com/nafphp/framework/tree/v0.2.1"
+                "source": "https://github.com/nafphp/framework/tree/v0.2.3"
             },
-            "time": "2026-09-13T13:44:52+00:00"
+            "time": "2026-09-13T20:16:13+00:00"
         },
         {
             "name": "naf/session",
-            "version": "v0.2.0",
+            "version": "v0.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nafphp/session.git",
-                "reference": "a02bfdf08282b3bccaaf79bd9aa4a4790f12fea5"
+                "reference": "9ace904401e74a5e3b19350666a86f1bf780249b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nafphp/session/zipball/a02bfdf08282b3bccaaf79bd9aa4a4790f12fea5",
-                "reference": "a02bfdf08282b3bccaaf79bd9aa4a4790f12fea5",
+                "url": "https://api.github.com/repos/nafphp/session/zipball/9ace904401e74a5e3b19350666a86f1bf780249b",
+                "reference": "9ace904401e74a5e3b19350666a86f1bf780249b",
                 "shasum": ""
             },
             "require": {
@@ -156,22 +156,22 @@
             "description": "NAF Session Plugin for storing data across requests.",
             "support": {
                 "issues": "https://github.com/nafphp/session/issues",
-                "source": "https://github.com/nafphp/session/tree/v0.2.0"
+                "source": "https://github.com/nafphp/session/tree/v0.2.1"
             },
-            "time": "2026-09-13T13:56:42+00:00"
+            "time": "2026-09-13T19:58:07+00:00"
         },
         {
             "name": "naf/view",
-            "version": "v0.2.0",
+            "version": "v0.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nafphp/view.git",
-                "reference": "ebb337780287539a3e51a897161f8fc11d222c2e"
+                "reference": "d3414d396cf99a68393bc31f91ff694437d5ffea"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nafphp/view/zipball/ebb337780287539a3e51a897161f8fc11d222c2e",
-                "reference": "ebb337780287539a3e51a897161f8fc11d222c2e",
+                "url": "https://api.github.com/repos/nafphp/view/zipball/d3414d396cf99a68393bc31f91ff694437d5ffea",
+                "reference": "d3414d396cf99a68393bc31f91ff694437d5ffea",
                 "shasum": ""
             },
             "require": {
@@ -201,9 +201,9 @@
             "description": "NAF View Plugin with simple templating.",
             "support": {
                 "issues": "https://github.com/nafphp/view/issues",
-                "source": "https://github.com/nafphp/view/tree/v0.2.0"
+                "source": "https://github.com/nafphp/view/tree/v0.2.1"
             },
-            "time": "2026-09-13T14:07:45+00:00"
+            "time": "2026-09-13T19:58:11+00:00"
         },
         {
             "name": "nyholm/psr7",

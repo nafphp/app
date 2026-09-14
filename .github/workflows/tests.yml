@@ -1,0 +1,40 @@
+name: NAF App
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php: ['8.3', '8.5']
+        dependencies: [locked, latest, lowest]
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: mbstring, pdo
+          tools: composer
+          coverage: none
+      - run: composer validate --strict
+      - name: Install the starter's locked dependencies
+        if: matrix.dependencies == 'locked'
+        run: composer install --no-interaction --prefer-dist
+      - name: Resolve the latest compatible dependencies
+        if: matrix.dependencies == 'latest'
+        run: composer update --no-interaction --prefer-dist
+      - name: Resolve the supported minimum dependencies
+        if: matrix.dependencies == 'lowest'
+        run: composer update --prefer-lowest --prefer-stable --no-interaction --prefer-dist
+      - run: composer test
