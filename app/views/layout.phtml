@@ -1,18 +1,45 @@
 <?php
+
+declare(strict_types=1);
+
+use function Naf\route;
 use function Naf\View\asset;
+use function Naf\View\s;
+
 asset()->add('/css/naf.css');
 ?>
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Welcome to your new App!</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Your NAF starter: ordinary PHP, a few useful plugins, and room for your next idea.">
+    <title><?= s($title ?? 'Your NAF application') ?></title>
+    <link rel="icon" type="image/png" href="/images/naf-mark.png">
     <?= asset()->render('css') ?>
 </head>
 <body>
-    <div class="content">
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-header page-width">
+        <a class="brand" href="<?= s(route('home')) ?>" aria-label="NAF home">
+            <img src="/images/naf-mark.png" alt="NAF" width="48" height="48">
+        </a>
+        <nav class="site-nav" aria-label="Main navigation">
+            <a href="https://nafphp.github.io/docs/">Documentation <span aria-hidden="true">↗</span></a>
+            <a href="https://github.com/nafphp/framework">GitHub <span aria-hidden="true">↗</span></a>
+        </nav>
+    </header>
+
+    <main id="main" class="page-width">
         <?= $this->renderBlock('content') ?>
-    </div>
+    </main>
+
+    <footer class="site-footer page-width">
+        <p>As simple as possible, as flexible as necessary.</p>
+        <a href="https://nafphp.github.io/docs/choosing-packages/">Add only what you need <span aria-hidden="true">↗</span></a>
+    </footer>
+
     <?= asset()->render('js') ?>
 </body>
 </html>

@@ -1,31 +1,46 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controllers;
 
 use App\Service\QuoteService;
 use Psr\Http\Message\ResponseInterface;
+
+use function Naf\abort;
 use function Naf\Form\is_post;
 use function Naf\Form\validator;
-use function Naf\app;
-use function Naf\View\render;
 use function Naf\json;
 use function Naf\param;
 use function Naf\redirect;
 use function Naf\route;
+use function Naf\View\render;
 
 class WebsiteController
 {
+    public function __construct(private readonly QuoteService $quotes)
+    {
+    }
 
     public function index(): ResponseInterface
     {
-        /** @var QuoteService $quote */
-        $quote = app()->container()->get('quote');
-        return render('welcome', ['quote' => $quote->getRandomQuote()]);
+        return render('welcome', [
+            'title' => 'Welcome to your new App!',
+            'quote' => $this->quotes->getRandomQuote(),
+        ]);
     }
 
     public function api(): ResponseInterface
     {
-        $check = validator()->validate(param()->all(), [
+        $name = param()->get('name', '');
+        if (!is_string($name)) {
+            return json([
+                'error'  => 'Invalid request.',
+                'fields' => ['name' => ['Use a text value.']],
+            ], 422);
+        }
+
+        $check = validator()->validate(['name' => $name], [
             'name' => 'required|max:80',
         ]);
 
@@ -33,29 +48,39 @@ class WebsiteController
             return json(['error' => 'Invalid request.', 'fields' => $check->getErrorMessages()], 422);
         }
 
-        return json(['data' => ['hello' => param()->get('name')]]);
+        return json(['data' => ['hello' => $name]]);
     }
 
     public function contact(): ResponseInterface
     {
-        if (!is_post()) {
-            return render('contact', ['check' => validator()]);
+        $values = [];
+        $check  = validator();
+
+        if (is_post()) {
+            foreach (['firstname', 'lastname', 'message'] as $field) {
+                $value = param()->get($field, '');
+                if (!is_string($value)) {
+                    abort(400, 'Form fields must be text.');
+                }
+                $values[$field] = $value;
+            }
+
+            $check->validate($values, [
+                'firstname' => 'required|max:80',
+                'lastname'  => 'required|max:80',
+                'message'   => 'required|min:10',
+            ]);
+
+            if ($check->isValid()) {
+                // This demo validates only. Add your application service here.
+                return redirect(route('contact'));
+            }
         }
 
-        $check = validator()->validate(param()->all(), [
-            'firstname' => 'required|max:80',
-            'lastname'  => 'required|max:80',
-            'message'   => 'required|min:10',
+        return render('contact', [
+            'title'  => 'Form demo · NAF',
+            'check'  => $check,
+            'values' => $values,
         ]);
-
-        if (!$check->isValid()) {
-            // Back to the form; memory() still finds what was typed.
-            return render('contact', ['check' => $check]);
-        }
-
-        // Do something with it here - send a mail, store it, queue it.
-
-        return redirect(route('contact'));
     }
-
 }

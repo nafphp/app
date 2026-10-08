@@ -1,5 +1,5 @@
 <?php
 
-// Resolved against this file, not the working directory: a server started
-// anywhere but inside public/ would otherwise never find the bootstrap.
-require_once __DIR__ . '/../bootstrap.php';
+declare(strict_types=1);
+
+require_once dirname(__DIR__) . '/bootstrap.php';
