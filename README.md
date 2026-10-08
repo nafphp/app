@@ -21,6 +21,17 @@ APP_ENV=dev php -S 127.0.0.1:8000 -t public
 
 Serve only `public/`. Keep the development server on localhost.
 
+## Explore the demo
+
+The welcome page includes interactive form and JSON examples. They use `fetch()` to show
+validation errors, responses and HTTP status without a page reload. The contact example
+validates only; it does not send or store messages. The forms retain their normal submissions
+when JavaScript is unavailable. The form plugin checks CSRF for both examples.
+
+`Start fresh` opens the cleanup steps with Copy buttons for the terminal commands. Replace
+the demo routes first and save any changes you want to keep before running the removal command.
+The installed framework and plugins remain your starting point.
+
 ## License
 
 MIT. Part of [NAF](https://github.com/nafphp/framework).

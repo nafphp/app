@@ -5,6 +5,7 @@ declare(strict_types=1);
 use function Naf\Form\csrf;
 use function Naf\route;
 use function Naf\View\s;
+use function Naf\View\view;
 
 $token = csrf()->generate();
 
@@ -17,64 +18,27 @@ $this->block('content');
     <div class="section-heading">
         <p class="eyebrow">The form demo</p>
         <h1 id="contact-title">A form, end to end.</h1>
-        <p>Three fields, a little validation, and a redirect when everything looks good.</p>
+        <p>Three fields, server-side validation, and feedback right here.</p>
     </div>
 
     <div class="contact-grid">
-        <form class="contact-form" action="<?= s(route('contact.submit')) ?>" method="post">
-            <div class="name-grid">
-                <div class="form-field">
-                    <label for="firstname">First name</label>
-                    <input id="firstname" name="firstname" value="<?= s($values['firstname'] ?? '') ?>"
-                           maxlength="80" required autocomplete="given-name" aria-describedby="firstname-error"
-                           aria-invalid="<?= $check->getErrorMessage('firstname') !== null ? 'true' : 'false' ?>">
-                    <div id="firstname-error" class="field-error">
-                        <?php foreach ($check->getErrorMessage('firstname') ?? [] as $error): ?>
-                            <p><?= s($error) ?></p>
-                        <?php endforeach; ?>
-                    </div>
-                </div>
-                <div class="form-field">
-                    <label for="lastname">Last name</label>
-                    <input id="lastname" name="lastname" value="<?= s($values['lastname'] ?? '') ?>"
-                           maxlength="80" required autocomplete="family-name" aria-describedby="lastname-error"
-                           aria-invalid="<?= $check->getErrorMessage('lastname') !== null ? 'true' : 'false' ?>">
-                    <div id="lastname-error" class="field-error">
-                        <?php foreach ($check->getErrorMessage('lastname') ?? [] as $error): ?>
-                            <p><?= s($error) ?></p>
-                        <?php endforeach; ?>
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-field">
-                <label for="message">Message</label>
-                <textarea id="message" name="message" rows="6" minlength="10" required
-                          placeholder="At least 10 characters. What would you like to build?"
-                          aria-describedby="message-error" aria-invalid="<?= $check->getErrorMessage('message') !== null ? 'true' : 'false' ?>"><?= s($values['message'] ?? '') ?></textarea>
-                <div id="message-error" class="field-error">
-                    <?php foreach ($check->getErrorMessage('message') ?? [] as $error): ?>
-                        <p><?= s($error) ?></p>
-                    <?php endforeach; ?>
-                </div>
-            </div>
-
-            <input type="hidden" name="_csrf" value="<?= s($token) ?>">
-            <div class="form-footer">
-                <button type="submit">Try a submission <span aria-hidden="true">→</span></button>
-                <p class="note">Nothing is sent or stored.</p>
-            </div>
-        </form>
+        <?= view('partials.contact-form', [
+            'token'   => $token,
+            'values'  => $values,
+            'errors'  => $check->getErrorMessages(),
+            'compact' => false,
+        ]) ?>
 
         <aside class="form-notes" aria-labelledby="form-notes-title">
             <h2 id="form-notes-title">What happens here?</h2>
             <ol>
                 <li>The form plugin checks the CSRF token.</li>
                 <li>The controller validates your input.</li>
-                <li>Invalid input returns here with escaped values and field errors.</li>
-                <li>Valid input redirects to a fresh form.</li>
+                <li>Field errors appear beside your input, so you can correct it.</li>
+                <li>A valid submission shows a success message without leaving the page.</li>
             </ol>
-            <p>Add your application service before the redirect to store a message or send mail.</p>
+            <p>Without JavaScript, the same form renders errors or redirects on success.
+                Add your application service in the controller to store a message or send mail.</p>
             <a href="https://nafphp.github.io/docs/recipes/contact-form/">Build a real contact form <span aria-hidden="true">↗</span></a>
         </aside>
     </div>

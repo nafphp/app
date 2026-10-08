@@ -135,7 +135,13 @@ Return `json()`, `render()` or `redirect()` responses from handlers and let NAF 
 ## Know the demonstration's limits
 
 The [contact action](app/Controllers/WebsiteController.php) validates and redirects; it does
-not send or persist a message. [SendMailJob](app/Jobs/SendMailJob.php) is an unused example
+not send or persist a message. With `Accept: application/json`, it returns JSON field errors
+with status 422 or a success response with status 200. The welcome and contact pages share
+[the form template](app/views/partials/contact-form.phtml); generate their CSRF token once in
+the parent page. [public/js/demo.js](public/js/demo.js) progressively enhances both examples
+with `fetch()`, keeping the CSRF token and same-origin session cookies. Do not generate a new
+token for each JSON response: both forms on the welcome page share the original token.
+[SendMailJob](app/Jobs/SendMailJob.php) is an unused example
 requiring `naf/queue`/`naf/cli`, which the starter does not install; it only logs and prints.
 Neither is a ready mail integration. For delivery, install `naf/mail` and use its mailer;
 for tests, explicitly bind the [documented dummy or file transport](https://nafphp.github.io/docs/mail/).
@@ -146,6 +152,8 @@ set `PHP_COMMAND='php -n'` only when needed for a broken local INI configuration
 required extensions are built in. CI runs the test on PHP 8.3 and 8.5 with locked, latest and
 lowest dependencies. It checks welcome/assets, contact rendering, CSRF rejection, validation,
 redirect status/Location, input escaping/types, API JSON and the documented demo removal.
+It also checks JSON contact responses and repeated requests with a shared CSRF token. Verify
+browser feedback, reset, Copy buttons and mobile layout when changing the demo JavaScript.
 It uses disposable copies and exercises bootstrap from a different working directory.
 There is no PHPUnit suite or analyse script. Lint changed PHP and test added routes such as
 `/greet/Ada` too. Keep tests of redirects from
@@ -163,3 +171,5 @@ the same logo mark and charcoal/teal palette as the documentation. `showQuote` i
 `app/config.php` controls the quote panel; the quotes remain in `QuoteService`.
 The welcome page explains replacing routes before deleting their demo files. Keep those
 instructions and the removal smoke test consistent when changing the starter layout.
+`Start fresh` opens the instructions and copies commands; it does not expose a web endpoint
+that deletes project files. Remove the unused form partial and JavaScript when cleaning up.

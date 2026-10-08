@@ -39,9 +39,9 @@ def main():
         checks += 1
         print('PASS', message, flush=True)
 
-    def request(path, data=None, binary=False):
+    def request(path, data=None, binary=False, headers=None):
         body = urllib.parse.urlencode(data).encode() if data is not None else None
-        req = urllib.request.Request(f'http://127.0.0.1:{port}{path}', data=body)
+        req = urllib.request.Request(f'http://127.0.0.1:{port}{path}', data=body, headers=headers or {})
         try:
             result = opener.open(req, timeout=5)
         except urllib.error.HTTPError as error:
@@ -91,6 +91,10 @@ def main():
                 expect('Keep the framework. Lose the demo.' in body and 'composer create-project naf/app my-next-app' in body,
                        'Welcome explains removing the demos and starting a fresh project')
                 expect('action="/api"' in body and 'name="_csrf"' in body, 'Welcome exposes the CSRF-protected JSON demo')
+                expect('data-demo="contact"' in body and 'data-demo="api"' in body,
+                       'Both interactive examples are available on the welcome page')
+                tokens = re.findall(r'name="_csrf" value="([^"]+)"', body)
+                expect(len(tokens) == 2 and len(set(tokens)) == 1, 'Welcome forms share one generated CSRF token')
                 configuration = host / 'app/config.php'
                 original_configuration = configuration.read_text()
                 configuration.write_text("<?php return ['showQuote' => false];\n")
@@ -102,6 +106,9 @@ def main():
                 status, headers, body = request('/css/naf.css')
                 expect(status == 200 and 'text/css' in headers.get('Content-Type', '') and body,
                        'Public CSS is served')
+                status, headers, body = request('/js/demo.js')
+                expect(status == 200 and 'javascript' in headers.get('Content-Type', '') and body,
+                       'Interactive demo JavaScript is served')
                 expect(request('/contact', {'firstname': 'Ada'})[0] == 400,
                        'Contact rejects missing CSRF token')
                 expect(request('/api', {'name': 'Ada'})[0] == 400, 'API rejects missing CSRF token')
@@ -137,6 +144,30 @@ def main():
                 expect(status == 200 and json.loads(body) == {'data': {'hello': 'Ada'}}
                        and 'application/json' in headers.get('Content-Type', ''),
                        'Valid API input returns the expected JSON response')
+                accepts_json = {'Accept': 'application/json'}
+                expect(request('/contact', {'firstname': 'Ada'}, headers=accepts_json)[0] == 400,
+                       'Interactive contact still rejects missing CSRF tokens')
+                shared_token = token('/')
+                status, headers, body = request('/contact', {
+                    '_csrf': shared_token, 'firstname': '', 'lastname': '', 'message': 'short'}, headers=accepts_json)
+                expect(status == 422 and set(json.loads(body)['fields']) == {'firstname', 'lastname', 'message'}
+                       and 'application/json' in headers.get('Content-Type', ''),
+                       'Interactive contact returns JSON field errors with HTTP 422')
+                status, _, body = request('/contact', {
+                    '_csrf': shared_token, 'firstname[]': 'Ada', 'lastname': 'Lovelace',
+                    'message': 'A valid length message.'}, headers=accepts_json)
+                expect(status == 422 and 'firstname' in json.loads(body)['fields'],
+                       'Interactive contact rejects arrays as JSON field errors')
+                for attempt in range(2):
+                    status, headers, body = request('/contact', {
+                        '_csrf': shared_token, 'firstname': 'Ada', 'lastname': 'Lovelace',
+                        'message': 'Hello from the interactive starter.'}, headers=accepts_json)
+                    expect(status == 200 and 'Location' not in headers
+                           and json.loads(body)['data']['message'] == 'Your form passed validation. Nothing was sent or stored.',
+                           f'Interactive contact succeeds without redirect or token rotation (attempt {attempt + 1})')
+                status, _, body = request('/api', {'_csrf': shared_token, 'name': 'Grace'}, headers=accepts_json)
+                expect(status == 200 and json.loads(body) == {'data': {'hello': 'Grace'}},
+                       'API remains usable after contact submissions with the shared page token')
                 # Replace the routes before removing their controller, as the welcome page explains.
                 (host / 'app/routes.php').write_text("""<?php
 use App\\Controllers\\HomeController;
@@ -157,7 +188,8 @@ final class HomeController
 """)
                 (host / 'app/views/home.phtml').write_text('<!doctype html><h1>My own application</h1>\n')
                 for name in ('app/Controllers/WebsiteController.php', 'app/Service/QuoteService.php',
-                             'app/views/welcome.phtml', 'app/views/contact.phtml', 'app/Jobs/SendMailJob.php'):
+                             'app/views/welcome.phtml', 'app/views/contact.phtml',
+                             'app/views/partials/contact-form.phtml', 'app/Jobs/SendMailJob.php'):
                     (host / name).unlink()
                 configuration.write_text('<?php return [];\n')
                 status, _, body = request('/')

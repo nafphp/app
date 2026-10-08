@@ -13,6 +13,7 @@ use function Naf\Form\validator;
 use function Naf\json;
 use function Naf\param;
 use function Naf\redirect;
+use function Naf\request;
 use function Naf\route;
 use function Naf\View\render;
 
@@ -55,11 +56,19 @@ class WebsiteController
     {
         $values = [];
         $check  = validator();
+        $asJson = request()->getHeaderLine('Accept') === 'application/json';
 
         if (is_post()) {
             foreach (['firstname', 'lastname', 'message'] as $field) {
                 $value = param()->get($field, '');
                 if (!is_string($value)) {
+                    if ($asJson) {
+                        return json([
+                            'error'  => 'Invalid request.',
+                            'fields' => [$field => ['Use a text value.']],
+                        ], 422);
+                    }
+
                     abort(400, 'Form fields must be text.');
                 }
                 $values[$field] = $value;
@@ -73,7 +82,15 @@ class WebsiteController
 
             if ($check->isValid()) {
                 // This demo validates only. Add your application service here.
+                if ($asJson) {
+                    return json(['data' => ['message' => 'Your form passed validation. Nothing was sent or stored.']]);
+                }
+
                 return redirect(route('contact'));
+            }
+
+            if ($asJson) {
+                return json(['error' => 'Invalid request.', 'fields' => $check->getErrorMessages()], 422);
             }
         }
 

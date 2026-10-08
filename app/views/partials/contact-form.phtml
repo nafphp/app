@@ -1,0 +1,46 @@
+<?php
+
+declare(strict_types=1);
+
+use function Naf\route;
+use function Naf\View\s;
+
+?>
+<form class="<?= $compact ? 'demo-form' : 'contact-form' ?>" action="<?= s(route('contact.submit')) ?>"
+      method="post" data-demo="contact">
+    <div class="name-grid">
+        <?php foreach (['firstname' => 'First name', 'lastname' => 'Last name'] as $field => $label): ?>
+            <div class="form-field">
+                <label for="<?= s($field) ?>"><?= s($label) ?></label>
+                <input id="<?= s($field) ?>" name="<?= s($field) ?>" value="<?= s($values[$field] ?? '') ?>"
+                       maxlength="80" required autocomplete="<?= $field === 'firstname' ? 'given-name' : 'family-name' ?>"
+                       aria-describedby="<?= s($field) ?>-error" aria-invalid="<?= isset($errors[$field]) ? 'true' : 'false' ?>">
+                <div id="<?= s($field) ?>-error" class="field-error" data-field-error="<?= s($field) ?>">
+                    <?php foreach ($errors[$field] ?? [] as $error): ?>
+                        <p><?= s($error) ?></p>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+        <?php endforeach; ?>
+    </div>
+
+    <div class="form-field">
+        <label for="message">Message</label>
+        <textarea id="message" name="message" rows="<?= $compact ? '3' : '6' ?>" minlength="10" required
+                  placeholder="At least 10 characters. What would you like to build?"
+                  aria-describedby="message-error" aria-invalid="<?= isset($errors['message']) ? 'true' : 'false' ?>"><?= s($values['message'] ?? '') ?></textarea>
+        <div id="message-error" class="field-error" data-field-error="message">
+            <?php foreach ($errors['message'] ?? [] as $error): ?>
+                <p><?= s($error) ?></p>
+            <?php endforeach; ?>
+        </div>
+    </div>
+
+    <input type="hidden" name="_csrf" value="<?= s($token) ?>">
+    <div class="form-footer">
+        <button type="submit">Try a submission <span aria-hidden="true">→</span></button>
+        <button type="reset" class="button--quiet">Reset</button>
+    </div>
+    <p class="demo-feedback" role="status" aria-live="polite" aria-atomic="true" data-feedback></p>
+    <p class="note">Nothing is sent or stored.</p>
+</form>
