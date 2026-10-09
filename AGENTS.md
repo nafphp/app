@@ -42,10 +42,10 @@ The starter also excludes `nyholm/psr7` below 1.8.2: its implicit-nullability de
 on PHP 8.4+ become HTTP errors through NAF's error handler. Keep this transitive compatibility
 constraint until the required framework versions enforce an equivalent minimum themselves.
 
-Run the development server from the application root and serve only `public/`. The current
-bootstrap still loads `vendor/autoload.php` through a relative path; do not assume arbitrary
-working directories work. When changing bootstrap, use paths based on `__DIR__`, define
-`BASE_PATH` before the first `app()` call, and register services before `app()->run()`.
+Run the development server from the application root and serve only `public/`. The
+bootstrap and front controller resolve includes relative to their own files. Use paths
+based on `__DIR__`, define `BASE_PATH` before the first `app()` call, and register services
+before `app()->run()`.
 Configure production servers to route application requests through `public/index.php`.
 Keep local environment files and secrets out of commits; the starter's ignore list does not
 exclude `.env`. When present, `.env.local` replaces `.env`; NAF environment names are
@@ -75,15 +75,21 @@ Create `app/Controllers/GreetingController.php`:
 
 ```php
 <?php
+
+declare(strict_types=1);
+
 namespace App\Controllers;
 
 use App\Service\QuoteService;
 use Psr\Http\Message\ResponseInterface;
+
 use function Naf\json;
 
 final class GreetingController
 {
-    public function __construct(private QuoteService $quotes) {}
+    public function __construct(private readonly QuoteService $quotes)
+    {
+    }
 
     public function show(string $name): ResponseInterface
     {
@@ -103,10 +109,9 @@ route()->add('GET', '/greet/{name}', [GreetingController::class, 'show'], 'greet
 ```
 
 The default dispatcher autowires concrete constructor dependencies; the action receives
-the route's named `$name` parameter, not method injection. The existing starter separately
-binds `QuoteService` as `'quote'` for `WebsiteController`; that string binding is not an alias
-for `QuoteService::class`. If both consumers need the same configured instance, register it
-under the class name and deliberately connect or migrate the old binding. `get()` retrieves
+the route's named `$name` parameter, not method injection. `WebsiteController` receives
+`QuoteService` through the same constructor injection; no string service binding is needed.
+If consumers need the same configured instance, register it under its class name. `get()` retrieves
 registered services; `make()` constructs classes. Bind interfaces and scalar configuration
 explicitly. See the [DI guide](https://nafphp.github.io/docs/dependency-injection/).
 
@@ -120,16 +125,23 @@ use function Naf\View\s;
 <input name="firstname" value="<?= s(memory('firstname')) ?>">
 ```
 
-`memory()` reads the current request; it does not escape HTML or survive a redirect. Do not
-copy the starter contact template's raw `memory()` output into new code. Validate input types
-and fields with `validator()->validate(...)`, inspect `isValid()`, and retain CSRF protection.
+`memory()` reads the current request; it does not escape HTML or survive a redirect. The
+starter controller checks input types and passes explicit values to its form; the template
+escapes those values with `s()`. Validate input types and fields with
+`validator()->validate(...)`, inspect `isValid()`, and retain CSRF protection.
 Generate a token once per rendered page and reuse it. A Bearer header alone is not authentication.
 Return `json()`, `render()` or `redirect()` responses from handlers and let NAF emit them.
 
 ## Know the demonstration's limits
 
 The [contact action](app/Controllers/WebsiteController.php) validates and redirects; it does
-not send or persist a message. [SendMailJob](app/Jobs/SendMailJob.php) is an unused example
+not send or persist a message. With `Accept: application/json`, it returns JSON field errors
+with status 422 or a success response with status 200. The welcome and contact pages share
+[the form template](app/views/partials/contact-form.phtml); generate their CSRF token once in
+the parent page. [public/js/demo.js](public/js/demo.js) progressively enhances both examples
+with `fetch()`, keeping the CSRF token and same-origin session cookies. Do not generate a new
+token for each JSON response: both forms on the welcome page share the original token.
+[SendMailJob](app/Jobs/SendMailJob.php) is an unused example
 requiring `naf/queue`/`naf/cli`, which the starter does not install; it only logs and prints.
 Neither is a ready mail integration. For delivery, install `naf/mail` and use its mailer;
 for tests, explicitly bind the [documented dummy or file transport](https://nafphp.github.io/docs/mail/).
@@ -139,8 +151,12 @@ runner). The HTTP smoke test starts and stops its own PHP server on a free loopb
 set `PHP_COMMAND='php -n'` only when needed for a broken local INI configuration and all
 required extensions are built in. CI runs the test on PHP 8.3 and 8.5 with locked, latest and
 lowest dependencies. It checks welcome/assets, contact rendering, CSRF rejection, validation,
-redirect status/Location and API JSON. There is no PHPUnit suite or analyse script. Lint
-changed PHP and test added routes such as `/greet/Ada` too. Keep tests of redirects from
+redirect status/Location, input escaping/types, API JSON and the documented demo removal.
+It also checks JSON contact responses and repeated requests with a shared CSRF token. Verify
+browser feedback, reset, Copy buttons and mobile layout when changing the demo JavaScript.
+It uses disposable copies and exercises bootstrap from a different working directory.
+There is no PHPUnit suite or analyse script. Lint changed PHP and test added routes such as
+`/greet/Ada` too. Keep tests of redirects from
 following them automatically, and use session cookies and fresh CSRF tokens for submissions.
 
 When changing setup or examples, also check the public
@@ -148,3 +164,12 @@ When changing setup or examples, also check the public
 [first application](https://nafphp.github.io/docs/first-app/) and affected recipes.
 The sibling `docs/` checkout, when available, has an executable example runner documented in
 its README. Do not claim nonexistent starter tests or unrun checks passed.
+
+Follow the shared [PHP code style](https://github.com/nafphp/docs/blob/main/CODE_STYLE.md):
+explicit imports, readable logical groups and escaped template values. The starter ships
+the same logo mark and charcoal/teal palette as the documentation. `showQuote` in
+`app/config.php` controls the quote panel; the quotes remain in `QuoteService`.
+The welcome page explains replacing routes before deleting their demo files. Keep those
+instructions and the removal smoke test consistent when changing the starter layout.
+`Start fresh` opens the instructions and copies commands; it does not expose a web endpoint
+that deletes project files. Remove the unused form partial and JavaScript when cleaning up.

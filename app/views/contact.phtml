@@ -1,44 +1,46 @@
 <?php
+
+declare(strict_types=1);
+
 use function Naf\Form\csrf;
-use function Naf\Form\error;
-use function Naf\Form\memory;
 use function Naf\route;
+use function Naf\View\s;
+use function Naf\View\view;
+
+$token = csrf()->generate();
+
+$this->setLayout('layout');
+$this->block('content');
 ?>
+<section class="contact-page" aria-labelledby="contact-title">
+    <a class="back-link" href="<?= s(route('home')) ?>"><span aria-hidden="true">←</span> Back to the starter</a>
 
-<?php $this->setLayout('layout') ?>
-
-<?php $this->block('content'); ?>
-
-<div class="wrap">
-
-    <div class="container bg-dark p-2">
-
-    <form action="<?= route('contact') ?>" method="post">
-
-        <div class="grid">
-            <label for="firstname">Vorname:</label>
-            <input id="firstname" type="text" name="firstname" value="<?= memory('firstname') ?>" />
-            <?= error('firstname', $check) ?>
-
-            <label for="lastname">Nachname:</label>
-            <input id="lastname" type="text" name="lastname" value="<?= memory('lastname') ?>" />
-            <?= error('lastname', $check) ?>
-
-            <label for="message">Nachricht:</label>
-            <textarea id="message" name="message" rows="5" cols="50"><?= memory('message') ?></textarea>
-            <?= error('message', $check) ?>
-        </div>
-
-        <input type="hidden" name="_csrf" value="<?= csrf()->generate() ?>" />
-
-        <hr />
-
-        <button>Abschicken</button>
-
-    </form>
-
+    <div class="section-heading">
+        <p class="eyebrow">The form demo</p>
+        <h1 id="contact-title">A form, end to end.</h1>
+        <p>Three fields, server-side validation, and feedback right here.</p>
     </div>
 
-</div>
+    <div class="contact-grid">
+        <?= view('partials.contact-form', [
+            'token'   => $token,
+            'values'  => $values,
+            'errors'  => $check->getErrorMessages(),
+            'compact' => false,
+        ]) ?>
 
-<?php $this->endblock('content') ?>
+        <aside class="form-notes" aria-labelledby="form-notes-title">
+            <h2 id="form-notes-title">What happens here?</h2>
+            <ol>
+                <li>The form plugin checks the CSRF token.</li>
+                <li>The controller validates your input.</li>
+                <li>Field errors appear beside your input, so you can correct it.</li>
+                <li>A valid submission shows a success message without leaving the page.</li>
+            </ol>
+            <p>Without JavaScript, the same form renders errors or redirects on success.
+                Add your application service in the controller to store a message or send mail.</p>
+            <a href="https://nafphp.github.io/docs/recipes/contact-form/">Build a real contact form <span aria-hidden="true">↗</span></a>
+        </aside>
+    </div>
+</section>
+<?php $this->endblock('content'); ?>

@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Service;
 
 class QuoteService
 {
-
+    /** @var list<array{0: string, 1: string}> */
     protected array $quotes = [
         ['Will Rogers', 'Don’t let yesterday take up too much of today.'],
         ['Audrey Hepburn', 'Nothing is impossible. The word itself says "I\'m possible!"'],
@@ -20,12 +22,12 @@ class QuoteService
         ['Nelson Mandela', 'It always seems impossible until it\'s done.'],
         ['Amanda Gorman', 'There is no better compass than compassion.'],
         ['Suzy Kassem', 'Doubt kills more dreams than failure ever will.'],
-        ['Walt Disney', 'The best way to get started is to quit talking and begin doing.']
+        ['Walt Disney', 'The best way to get started is to quit talking and begin doing.'],
     ];
 
+    /** @return array{0: string, 1: string} */
     public function getRandomQuote(): array
     {
         return $this->quotes[array_rand($this->quotes)];
     }
-
 }

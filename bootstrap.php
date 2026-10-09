@@ -1,14 +1,12 @@
 <?php
 
-require_once 'vendor/autoload.php';
+declare(strict_types=1);
 
-use App\Service\QuoteService;
 use function Naf\app;
 
 const BASE_PATH = __DIR__;
 
-app()->container()->set('quote', function() {
-    return new QuoteService();
-});
+require_once __DIR__ . '/vendor/autoload.php';
 
+// Register application services here, before run() handles the request.
 app()->run();

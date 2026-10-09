@@ -1,52 +1,199 @@
 <?php
+
+declare(strict_types=1);
+
 use function Naf\config;
+use function Naf\Form\csrf;
 use function Naf\route;
 use function Naf\View\s;
+use function Naf\View\view;
+
+$showQuote = (bool) config('showQuote', true);
+$token     = csrf()->generate();
+
+$this->setLayout('layout');
+$this->block('content');
 ?>
-
-<?php $this->setLayout('layout') ?>
-
-<?php $this->block('content');
-    /* @var array $quote */
-    [$author, $quoteText] = $quote;
-?>
-
-    <div class="header">
-        <a class="logo" href="<?= route('home') ?>">
-            <img src="/images/naf-logo.png" alt="Logo" />
-        </a>
+<section class="hero <?= $showQuote ? 'hero--with-quote' : '' ?>" aria-labelledby="welcome-title">
+    <div class="hero-copy">
+        <p class="eyebrow"><span class="status-dot" aria-hidden="true"></span> Your application is running</p>
+        <h1 id="welcome-title">It works.<br><span>Now make it yours.</span></h1>
+        <p class="lead">A small framework, ordinary PHP, and a clean starting point.
+            Your routes, views and form validation are ready for your next idea.</p>
+        <div class="actions">
+            <a class="button" href="https://nafphp.github.io/docs/first-app/">Build your first app <span aria-hidden="true">↗</span></a>
+            <a class="button button--quiet" href="#fresh-start" data-start-fresh>Start fresh <span aria-hidden="true">↓</span></a>
+        </div>
     </div>
 
-    <div class="wrap mt-1">
+    <?php if ($showQuote): ?>
+        <?php [$author, $quoteText] = $quote; ?>
+        <figure class="quote">
+            <p class="eyebrow">A little inspiration</p>
+            <span class="quote-mark" aria-hidden="true">“</span>
+            <blockquote><?= s($quoteText) ?></blockquote>
+            <figcaption><span aria-hidden="true">— </span><?= s($author) ?></figcaption>
+            <p class="quote-note">A new thought on every visit.</p>
+        </figure>
+    <?php endif; ?>
+</section>
 
-        <div class="container quote p-2">
-            <div class="quoteText">
-                <?php if (config('showQuote', false)): ?>
-                    <span class="quoteSymbol">&rdquo;</span>
-                <?php endif; ?>
-                <?= s($quoteText) ?>
-            </div>
-            <div class="author">&boxh; <?= s($author) ?></div>
-        </div>
-
-        <div class="flex gap-1 mt-1">
-
-            <div class="container">
-                <div class="image-card">
-                    <img src="/images/github.png" alt="Github" />
-                    <a class="text text-center" href="https://github.com/nafphp/framework" target="_blank">Repository</a>
-                </div>
-            </div>
-
-            <div class="container">
-                <div class="image-card">
-                    <img src="/images/docs.png" alt="Documentation" />
-                    <a class="text text-center" href="https://nafphp.github.io/docs" target="_blank">Documentation</a>
-                </div>
-            </div>
-
-        </div>
-
+<section id="explore" class="section" aria-labelledby="explore-title">
+    <div class="section-heading">
+        <p class="eyebrow">Find your way around</p>
+        <h2 id="explore-title">Small files. Clear responsibilities.</h2>
+        <p>Everything here is application code. Open a file and make it your own.</p>
     </div>
 
-<?php $this->endblock('content') ?>
+    <div class="file-grid">
+        <article class="file-card">
+            <span class="step-number">01 / Routes</span>
+            <h3>Give your idea a URL.</h3>
+            <p>Map requests to controller methods and name routes to generate their URLs.</p>
+            <code>app/routes.php</code>
+            <a href="https://nafphp.github.io/docs/routing/">Explore routing <span aria-hidden="true">↗</span></a>
+        </article>
+        <article class="file-card">
+            <span class="step-number">02 / Controllers</span>
+            <h3>Keep the flow simple.</h3>
+            <p>Use ordinary PHP classes, inject your services, and return a response.</p>
+            <code>app/Controllers/WebsiteController.php</code>
+            <a href="https://nafphp.github.io/docs/controllers/">Meet the controllers <span aria-hidden="true">↗</span></a>
+        </article>
+        <article class="file-card">
+            <span class="step-number">03 / Views</span>
+            <h3>Make it feel like you.</h3>
+            <p>Write PHP templates, share a layout, and escape displayed values with <code>s()</code>.</p>
+            <code>app/views/ · public/css/naf.css</code>
+            <a href="https://nafphp.github.io/docs/views/">Work with views <span aria-hidden="true">↗</span></a>
+        </article>
+    </div>
+</section>
+
+<section id="demos" class="section" aria-labelledby="demo-title">
+    <div class="section-heading">
+        <p class="eyebrow">Try something small</p>
+        <h2 id="demo-title">Two examples. Ready to explore.</h2>
+        <p>Send a real request. See the result here. Both examples use the form plugin’s CSRF protection.</p>
+    </div>
+
+    <div class="demo-grid">
+        <article class="demo-card">
+            <span class="route-label">GET + POST /contact</span>
+            <h3>A form with a little feedback.</h3>
+            <p>Try a short message to see field errors, then correct it and submit again.</p>
+            <?= view('partials.contact-form', [
+                'token'   => $token,
+                'values'  => [],
+                'errors'  => [],
+                'compact' => true,
+            ]) ?>
+            <a class="demo-link" href="<?= s(route('contact')) ?>">Explore the full form example <span aria-hidden="true">→</span></a>
+        </article>
+
+        <article class="demo-card">
+            <span class="route-label">POST /api</span>
+            <h3>A small JSON hello.</h3>
+            <p>Send a name and get a JSON response. Empty names receive field errors.</p>
+            <form class="api-form" data-demo="api" action="<?= s(route('api')) ?>" method="post">
+                <label for="api-name">Your name</label>
+                <div class="input-row">
+                    <input id="api-name" name="name" value="Ada" maxlength="80" required autocomplete="given-name"
+                           aria-describedby="api-name-error" aria-invalid="false">
+                    <button type="submit">Send request <span aria-hidden="true">→</span></button>
+                </div>
+                <div id="api-name-error" class="field-error" data-field-error="name"></div>
+                <input type="hidden" name="_csrf" value="<?= s($token) ?>">
+                <p class="demo-feedback" role="status" aria-live="polite" aria-atomic="true" data-feedback></p>
+                <div class="response-panel">
+                    <div class="response-heading">
+                        <span data-response-title>Example response</span>
+                        <span class="response-status" data-response-status>Ready</span>
+                    </div>
+                    <pre class="response-preview"><code data-response>{
+  "data": {
+    "hello": "Ada"
+  }
+}</code></pre>
+                </div>
+                <button class="button--quiet" type="reset">Reset</button>
+            </form>
+            <p class="note">For persistent data, follow the <a href="https://nafphp.github.io/docs/recipes/json-api/">JSON API recipe</a>.</p>
+        </article>
+    </div>
+</section>
+
+<section id="fresh-start" class="section fresh-start" aria-labelledby="fresh-title">
+    <div class="section-heading">
+        <p class="eyebrow">Make room for your application</p>
+        <h2 id="fresh-title">Keep the framework. Lose the demo.</h2>
+        <p>These pages are a starting point. Replace the demo with your own app using the steps below.</p>
+    </div>
+
+    <details id="remove-demo">
+        <summary>Remove the example pages and start with your own routes <span aria-hidden="true">+</span></summary>
+        <div class="details-content">
+            <ol class="reset-steps">
+                <li>
+                    <h3>Replace the entry points first.</h3>
+                    <p>Follow <a href="https://nafphp.github.io/docs/first-app/">Your first application</a> to replace
+                        <code>app/routes.php</code> and create <code>HomeController.php</code> and <code>home.phtml</code>.
+                        Keep <code>bootstrap.php</code>, <code>public/index.php</code> and Composer's <code>App\</code> autoload mapping.</p>
+                </li>
+                <li>
+                    <h3>Remove the files you no longer use.</h3>
+                    <p>From the project root, after replacing the routes and saving any changes you want to keep:</p>
+                    <div class="command-block">
+                        <div class="command-heading">
+                            <span>Terminal commands</span>
+                            <button class="button--quiet copy-button" type="button" data-copy>Copy commands</button>
+                        </div>
+                        <pre><code>rm app/Controllers/WebsiteController.php app/Service/QuoteService.php \
+  app/views/welcome.phtml app/views/contact.phtml \
+  app/views/partials/contact-form.phtml app/Jobs/SendMailJob.php</code></pre>
+                    </div>
+                    <p>The job is an unused example, not a mail integration. Replace <code>app/config.php</code>
+                        with <code>&lt;?php return [];</code> if you only used its <code>showQuote</code> option.
+                        Keep <code>layout.phtml</code>, the stylesheet and logo while your own views use them;
+                        remove them once your design replaces them.</p>
+                    <p>Remove <code>public/js/demo.js</code> and its <code>asset()->add()</code> line in
+                        <code>app/views/layout.phtml</code> when your pages no longer use the interactive demos or Copy buttons.</p>
+                </li>
+                <li>
+                    <h3>Run your own starting point.</h3>
+                    <div class="command-block">
+                        <div class="command-heading">
+                            <span>Terminal commands</span>
+                            <button class="button--quiet copy-button" type="button" data-copy>Copy commands</button>
+                        </div>
+                        <pre><code>composer dump-autoload
+php -S 127.0.0.1:8000 -t public</code></pre>
+                    </div>
+                    <p>Replace or remove <code>tests/smoke.py</code> and the <code>test</code> Composer script
+                        when your routes replace these demos. If you no longer use forms or views,
+                        <a href="https://nafphp.github.io/docs/choosing-packages/">review those plugin dependencies</a> too.</p>
+                </li>
+            </ol>
+        </div>
+    </details>
+
+    <details>
+        <summary>Create a completely fresh project <span aria-hidden="true">+</span></summary>
+        <div class="details-content">
+            <p>Stop the development server with Ctrl+C. From the parent directory, create a new, unused directory:</p>
+            <div class="command-block">
+                <div class="command-heading">
+                    <span>Terminal commands</span>
+                    <button class="button--quiet copy-button" type="button" data-copy>Copy commands</button>
+                </div>
+                <pre><code>composer create-project naf/app my-next-app
+cd my-next-app
+APP_ENV=dev php -S 127.0.0.1:8000 -t public</code></pre>
+            </div>
+            <p>Your previous project stays available while you move over anything you need.
+                Once you have backed it up and checked the new app, you can delete the old project directory.
+                Serve only <code>public/</code> and keep this development server on localhost.</p>
+        </div>
+    </details>
+</section>
+<?php $this->endblock('content'); ?>
