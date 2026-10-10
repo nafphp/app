@@ -30,12 +30,13 @@ cd nafphp-agent-demo
 APP_ENV=dev php -S 127.0.0.1:8080 -t public
 ```
 
-The starter requires at least framework 0.2.2 and form 0.2.3: framework 0.2.2 fixes
-development-server redirects, form 0.2.3 checks CSRF for every state-changing method and adds
-`csrf()->token()`. New installations work without a separate dependency update. In
-applications created from older starters, run
-`composer require 'naf/framework:^0.2.2' 'naf/form:^0.2.3' --with-all-dependencies` to adopt
-these minimums. To test changes to the starter itself, copy the changed tree into a disposable
+The starter requires at least framework 0.2.9, form 0.2.4 and view 0.2.3. These versions
+provide CLI guards, composable response headers, safe form-memory defaults and assets with
+query strings or .mjs extensions. Form includes `csrf()->token()` and checks every unsafe
+method. New installations work without a separate dependency update. In applications
+created from older starters, run
+`composer require 'naf/framework:^0.2.9' 'naf/form:^0.2.4' 'naf/view:^0.2.3' --with-all-dependencies`
+to adopt these minimums. To test changes to the starter itself, copy the changed tree into a disposable
 host and run `composer install` followed by `composer test`; `create-project` alone only tests
 the published starter. Release dependencies before updating the starter's lock file, and
 verify the locked, latest compatible and minimum supported dependency sets before release.
