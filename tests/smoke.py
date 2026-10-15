@@ -39,9 +39,10 @@ def main():
         checks += 1
         print('PASS', message, flush=True)
 
-    def request(path, data=None, binary=False, headers=None):
+    def request(path, data=None, binary=False, headers=None, method=None):
         body = urllib.parse.urlencode(data).encode() if data is not None else None
-        req = urllib.request.Request(f'http://127.0.0.1:{port}{path}', data=body, headers=headers or {})
+        req = urllib.request.Request(f'http://127.0.0.1:{port}{path}', data=body,
+                                     headers=headers or {}, method=method)
         try:
             result = opener.open(req, timeout=5)
         except urllib.error.HTTPError as error:
@@ -95,6 +96,15 @@ def main():
                        'Both interactive examples are available on the welcome page')
                 tokens = re.findall(r'name="_csrf" value="([^"]+)"', body)
                 expect(len(tokens) == 2 and len(set(tokens)) == 1, 'Welcome forms share one generated CSRF token')
+                status, headers, body = request('/', method='HEAD')
+                expect(status == 200 and body == '' and int(headers.get('Content-Length', '0')) > 0,
+                       'HEAD serves welcome metadata without a body')
+                status, headers, body = request('/contact', method='OPTIONS')
+                expect(status == 204 and body == '' and headers.get('Allow') == 'GET, HEAD, POST, OPTIONS',
+                       'OPTIONS lists contact methods without requiring a CSRF token')
+                status, headers, _ = request('/api', method='GET')
+                expect(status == 405 and headers.get('Allow') == 'POST, OPTIONS',
+                       'Unsupported API method returns 405 and Allow')
                 configuration = host / 'app/config.php'
                 original_configuration = configuration.read_text()
                 configuration.write_text("<?php return ['showQuote' => false];\n")

@@ -38,3 +38,24 @@ jobs:
         if: matrix.dependencies == 'lowest'
         run: composer update --prefer-lowest --prefer-stable --no-interaction --prefer-dist
       - run: composer test
+
+  without-pdo:
+    name: Starter installation without PDO
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mbstring, :pdo, :pdo_sqlite, :pdo_mysql, :pdo_pgsql
+          coverage: none
+          tools: composer
+      - name: Install and exercise the starter without PDO
+        run: |
+          php -r 'if (extension_loaded("pdo")) { exit(1); }'
+          composer install --no-dev --no-interaction --prefer-dist
+          composer check-platform-reqs --no-dev
+          composer test

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5c35bcd55b8e5435cd324d787a1d2052",
+    "content-hash": "a7693132877ab06318fd2a0990e31b55",
     "packages": [
         {
             "name": "naf/form",
@@ -56,22 +56,21 @@
         },
         {
             "name": "naf/framework",
-            "version": "v0.2.9",
+            "version": "v0.2.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nafphp/framework.git",
-                "reference": "66ff7c78417ef9061c5abc360f47ea3015751962"
+                "reference": "4c8dc4e4141a81f544021415cdef381c2dc961e6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nafphp/framework/zipball/66ff7c78417ef9061c5abc360f47ea3015751962",
-                "reference": "66ff7c78417ef9061c5abc360f47ea3015751962",
+                "url": "https://api.github.com/repos/nafphp/framework/zipball/4c8dc4e4141a81f544021415cdef381c2dc961e6",
+                "reference": "4c8dc4e4141a81f544021415cdef381c2dc961e6",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
-                "ext-pdo": "*",
-                "nyholm/psr7": "^1.8",
+                "nyholm/psr7": "^1.8.2",
                 "nyholm/psr7-server": "^1.1",
                 "php": ">=8.3",
                 "psr/container": "^2.0",
@@ -80,6 +79,7 @@
                 "psr/log": "^3.0"
             },
             "require-dev": {
+                "phpstan/phpstan": "^2.1",
                 "phpunit/php-code-coverage": "^12.1",
                 "phpunit/phpunit": "^12.1"
             },
@@ -106,9 +106,9 @@
             "description": "NAF - the ultra-light, functional PHP framework for fast microservices and APIs.",
             "support": {
                 "issues": "https://github.com/nafphp/framework/issues",
-                "source": "https://github.com/nafphp/framework/tree/v0.2.9"
+                "source": "https://github.com/nafphp/framework/tree/v0.2.12"
             },
-            "time": "2026-10-10T13:55:54+00:00"
+            "time": "2026-10-14T21:40:45+00:00"
         },
         {
             "name": "naf/session",
