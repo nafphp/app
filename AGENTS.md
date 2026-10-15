@@ -30,19 +30,20 @@ cd nafphp-agent-demo
 APP_ENV=dev php -S 127.0.0.1:8080 -t public
 ```
 
-The starter requires at least framework 0.2.9, form 0.2.4 and view 0.2.3. These versions
-provide CLI guards, composable response headers, safe form-memory defaults and assets with
-query strings or .mjs extensions. Form includes `csrf()->token()` and checks every unsafe
-method. New installations work without a separate dependency update. In applications
-created from older starters, run
-`composer require 'naf/framework:^0.2.9' 'naf/form:^0.2.4' 'naf/view:^0.2.3' --with-all-dependencies`
+The starter requires at least framework 0.2.12, form 0.2.4 and view 0.2.3. These versions
+provide HEAD/OPTIONS/405 handling, optional PDO in the core, CLI guards, composable response
+headers, safe form-memory defaults and assets with query strings or .mjs extensions.
+Form includes `csrf()->token()` and checks every unsafe method. New installations work
+without a separate dependency update. In applications created from older starters, run
+`composer require 'naf/framework:^0.2.12' 'naf/form:^0.2.4' 'naf/view:^0.2.3' --with-all-dependencies`
 to adopt these minimums. To test changes to the starter itself, copy the changed tree into a disposable
 host and run `composer install` followed by `composer test`; `create-project` alone only tests
 the published starter. Release dependencies before updating the starter's lock file, and
 verify the locked, latest compatible and minimum supported dependency sets before release.
-The starter also excludes `nyholm/psr7` below 1.8.2: its implicit-nullability deprecations
-on PHP 8.4+ become HTTP errors through NAF's error handler. Keep this transitive compatibility
-constraint until the required framework versions enforce an equivalent minimum themselves.
+Framework 0.2.12 requires Nyholm PSR-7 1.8.2 or newer, so the starter no longer needs a
+separate compatibility conflict. Neither the starter nor its bundled plugins require PDO;
+database integrations declare their own extension requirements. Keep `app()->run()` as
+the normal bootstrap; the optional `handle()` API does not require application changes.
 
 Run the development server from the application root and serve only `public/`. The
 bootstrap and front controller resolve includes relative to their own files. Use paths
@@ -153,7 +154,8 @@ runner). The HTTP smoke test starts and stops its own PHP server on a free loopb
 set `PHP_COMMAND='php -n'` only when needed for a broken local INI configuration and all
 required extensions are built in. CI runs the test on PHP 8.3 and 8.5 with locked, latest and
 lowest dependencies. It checks welcome/assets, contact rendering, CSRF rejection, validation,
-redirect status/Location, input escaping/types, API JSON and the documented demo removal.
+HEAD metadata, automatic OPTIONS, 405 with Allow, redirect status/Location, input escaping/types,
+API JSON and the documented demo removal. CI also checks installation and HTTP without PDO.
 It also checks JSON contact responses and repeated requests with a shared CSRF token. Verify
 browser feedback, reset, Copy buttons and mobile layout when changing the demo JavaScript.
 It uses disposable copies and exercises bootstrap from a different working directory.
